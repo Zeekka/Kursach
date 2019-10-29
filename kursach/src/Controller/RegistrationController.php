@@ -22,14 +22,18 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationForm::class, $user);
 
         $em = $this->getDoctrine()->getManager();
-        // TODO: throw exeption if not find ROLE_USER
+
         $emrole = $this->getDoctrine()
             ->getRepository(Role::class)
             ->findOneBy([
                 'role' => "ROLE_USER"
             ]);
 
-        $form->getData()->setRoleId($emrole);
+        if (!$emrole){
+            throw new \Exception("ROLE_USER not found");
+        }
+        
+        $emrole->addUser($user);
 
         $form->handleRequest($request);
 
