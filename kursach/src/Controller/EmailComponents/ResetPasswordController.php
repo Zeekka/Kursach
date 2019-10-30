@@ -8,6 +8,7 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,8 @@ class ResetPasswordController extends AbstractController
             ->setMethod("GET")
             ->add('email', EmailType::class)
             ->add('get_code', SubmitType::class, ['label' => 'Get reset code'])
+            ->add('code', TextType::class, ['required' => false])
+            ->add('reset_password', SubmitType::class, ['label' => 'Reset password'])
             ->getForm();
 
         $form->handleRequest($request);
