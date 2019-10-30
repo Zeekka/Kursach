@@ -1,2 +1,2 @@
 <h1>Hey, {{ user.firstName }}, follow the link below to confirm your new account!</h1>
-<a href="{{ absolute_url(path('email_confirmation', {hash: user.uniqueHash})) }} "> CONFIRM ACCOUNT </a>
+<a href="{{ absolute_url(path('email_confirmation', {hash: user.uniqueHash})) }}"> CONFIRM ACCOUNT </a>
