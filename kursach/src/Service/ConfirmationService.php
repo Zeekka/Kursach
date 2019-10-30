@@ -18,7 +18,10 @@ class ConfirmationService
             ->from('adminmailer@mail.ru')
             ->to($user->getEmail())
             ->subject('Confirmation account')
-            ->htmlTemplate('email/register.html.twig');
+            ->htmlTemplate('email/register.html.twig')
+            ->context([
+                'user' => $user,
+            ]);
 
         try {
             $mailer->send($email);
