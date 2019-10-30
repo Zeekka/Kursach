@@ -9,7 +9,6 @@ use App\Service\ConfirmationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -37,11 +36,17 @@ class RegistrationController extends AbstractController
         }
 
         $emrole->addUser($user);
+
+
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
-            $confirmationService->sendMailToUser($user, $mailer);
+            $hash = $confirmationService->builtSha256($form->getData()->getEmail());
+            $user->setUniqueHash($hash);
+
+            $confirmationService->sendMailToUser($user, $mailer, $hash);
 
             $em->persist($user);
             $em->flush();

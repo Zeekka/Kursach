@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $isActive = false;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $uniqueHash;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -197,6 +202,18 @@ class User implements UserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getUniqueHash(): ?string
+    {
+        return $this->uniqueHash;
+    }
+
+    public function setUniqueHash(string $uniqueHash): self
+    {
+        $this->uniqueHash = $uniqueHash;
 
         return $this;
     }
