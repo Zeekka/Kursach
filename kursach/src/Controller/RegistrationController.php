@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
             $hash = $confirmationService->builtSha256($form->getData()->getEmail());
             $user->setUniqueHash($hash);
 
-            $confirmationService->sendMailToUser($user, $mailer, $hash);
+            $confirmationService->sendMailToUser($user, $mailer, $hash, "Confirmation", 'email/register.html.twig');
 
             $em->persist($user);
             $em->flush();
