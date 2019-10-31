@@ -20,7 +20,7 @@ class RegistrationController extends AbstractController
      */
     public function registrationAction(Request $request, UserPasswordEncoderInterface $encoder, ConfirmationService $confirmationService, MailerInterface $mailer)
     {
-        $user = new User($encoder);
+        $user = new User();
         $form = $this->createForm(RegistrationForm::class, $user);
 
         $em = $this->getDoctrine()->getManager();
@@ -37,12 +37,11 @@ class RegistrationController extends AbstractController
 
         $emrole->addUser($user);
 
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
+            $user->setPassword($encoder->encodePassword($user, $form->getData()->getPassword()));
             $hash = $confirmationService->builtSha256($form->getData()->getEmail());
             $user->setUniqueHash($hash);
 
