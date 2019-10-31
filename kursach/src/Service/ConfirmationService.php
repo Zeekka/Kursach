@@ -11,14 +11,14 @@ use Symfony\Bridge\Twig\Mime;
 
 class ConfirmationService
 {
-    public function sendMailToUser(User $user, MailerInterface $mailer, string $hash, string $subject, string $template): void
+    public function sendMailToUser(User $user, MailerInterface $mailer, string $hash): void
     {
         // TODO: attach hash to request
         $email = (new  Mime\TemplatedEmail())
             ->from('adminmailer@mail.ru')
             ->to($user->getEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
+            ->subject('Confirmation account')
+            ->htmlTemplate('email/register.html.twig')
             ->context([
                 'user' => $user,
             ]);
