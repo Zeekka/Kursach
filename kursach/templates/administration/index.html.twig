@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdministrationController!{% endblock %}
+
+{% block body %}
+<table>
+    {% for user in users %}
+        <tr>
+            <td>
+                ID: {{ user.id }}
+            </td>
+            <td>
+                First Name: {{ user.firstName }}
+            </td>
+            <td>
+               Last Name:  {{ user.lastName }}
+            </td>
+            <td>
+               Email: {{ user.email }}
+            </td>
+            <td>
+               Role: {{ user.roles[0] }}
+            </td>
+            <td>
+               Status: {{ user.isActive }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
