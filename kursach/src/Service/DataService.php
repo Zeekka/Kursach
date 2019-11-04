@@ -18,11 +18,27 @@ class DataService
         $this->container = $container;
     }
 
-    public function getUsers(): array
+    public function getUsers($request)
     {
         $em = $this->em;
-        $users = $em->getRepository(User::class)
-            ->findAll();
+        $container = $this->container;
+
+        $query = $em->createQuery(
+            '
+            SELECT
+                user, roles
+            FROM
+                App\Entity\User user
+            INNER JOIN user.role_id roles        
+            '
+        );
+
+        $paginator = $container->get('knp_paginator');
+        $users = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 10)
+        );
 
         return $users;
     }

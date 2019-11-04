@@ -19,7 +19,7 @@
                Email: {{ user.email }}
             </td>
             <td>
-               Role: {{ user.roles[0] }}
+                Role: {{ user.roles[0] }}
             </td>
             <td>
                Status: {{ user.isActive }}
@@ -27,4 +27,12 @@
         </tr>
     {% endfor %}
 </table>
+    <div class="navigation">
+        {{ knp_pagination_render(users) }}
+    </div>
+    <style>
+        .navigation li{
+            display: inline;
+        }
+    </style>
 {% endblock %}
