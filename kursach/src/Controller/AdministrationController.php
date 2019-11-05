@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdministrationController extends AbstractController
 {
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_MODERATOR")
      * @Route("/administration", name="administration", methods={"GET", "POST"})
      */
     public function administration(DataService $dataService, Request $request): Response

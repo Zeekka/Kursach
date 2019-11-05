@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<table>
+    <tr>
+        <td>
+            ID: {{ user.id }}
+        </td>
+        <td>
+            First Name: {{ user.firstName }}
+        </td>
+        <td>
+            Last Name:  {{ user.lastName }}
+        </td>
+        <td>
+            Email: {{ user.email }}
+        </td>
+        <td>
+            <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
+        </td>
+    </tr>
+</table>
+{% endblock %}

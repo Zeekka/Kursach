@@ -24,6 +24,9 @@
             <td>
                Status: {{ user.isActive }}
             </td>
+            <td>
+                <a href="{{ path('user_show', {id: user.id} ) }}">Edit</a>
+            </td>
         </tr>
     {% endfor %}
 </table>

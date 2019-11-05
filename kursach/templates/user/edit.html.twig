@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    {{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.email) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+
+    {% if not is_granted('ROLE_MODERATOR') %}
+        {{ form_widget(form.isActive, {attr: {style: "display:none"}}) }}
+        {{  form_widget(form.role_id, {attr: {style: "display:none"}}) }}
+    {% endif %}
+
+    {{ form_row(form.isActive) }}
+    {{ form_row(form.role_id) }}
+
+    {{ form_end(form) }}
+
+{% endblock %}

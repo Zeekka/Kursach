@@ -3,10 +3,11 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {% if is_granted("ROLE_ADMIN") %}
+    {% if is_granted("ROLE_MODERATOR") %}
         <a href="{{ path('administration') }}">ADMINISTRATION</a>
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <a href="{{ path('user_show', {id: app.user.id} ) }}">MY ACCOUNT</a>
         <a href="{{ path('app_logout') }}"> LOGOUT </a>
     {% else %}
         <a href="{{ path('registration') }}"> SIGN UP </a>
