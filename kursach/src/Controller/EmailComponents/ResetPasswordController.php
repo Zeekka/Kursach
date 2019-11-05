@@ -49,7 +49,7 @@ class ResetPasswordController extends AbstractController
 
             $hash = $confirmationService->builtSha256($user->getEmail());
             $user->setUniqueHash($hash);
-            $confirmationService->sendMailToUser($user, $mailer, $hash, "Reset password", 'email/reset_mail.html.twig');
+            $confirmationService->sendMailToUser($user, $mailer, "Reset password", 'email/reset_mail.html.twig');
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();

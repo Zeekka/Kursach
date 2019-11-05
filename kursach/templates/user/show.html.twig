@@ -18,6 +18,9 @@
             Email: {{ user.email }}
         </td>
         <td>
+            Email: {{ user.roles[0] }}
+        </td>
+        <td>
             <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
         </td>
     </tr>
