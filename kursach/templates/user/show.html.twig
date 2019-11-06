@@ -8,21 +8,32 @@
         <td>
             ID: {{ user.id }}
         </td>
+    </tr>
+    <tr>
         <td>
             First Name: {{ user.firstName }}
         </td>
+    </tr>
+    <tr>
         <td>
             Last Name:  {{ user.lastName }}
         </td>
+    </tr>
+    <tr>
         <td>
             Email: {{ user.email }}
         </td>
+    </tr>
+    <tr>
         <td>
-            Email: {{ user.roles[0] }}
-        </td>
-        <td>
-            <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
+            Role: {{ user.roles[0] }}
         </td>
     </tr>
+
+        {% if is_granted('ROLE_MODERATOR') or app.user is same as(user) %}
+            <td>
+                <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
+            </td>
+        {% endif %}
 </table>
 {% endblock %}
