@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Service\ConfirmationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -58,7 +59,7 @@ class ResetPasswordController extends AbstractController
         $reset_password = $this->createFormBuilder()
             ->setMethod("GET")
             ->add('Reset_code', TextType::class, ['required' => true])
-            ->add('new_password', TextType::class, ['required' => true])
+            ->add('new_password', PasswordType::class, ['required' => true])
             ->add('reset', SubmitType::class)
             ->getForm();
 
