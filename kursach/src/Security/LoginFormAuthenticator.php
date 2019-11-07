@@ -77,6 +77,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
+        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password'])){
+            throw new CustomUserMessageAuthenticationException('Bad credentials');
+        }
+        if (!$user->getIsActive()){
+            throw new CustomUserMessageAuthenticationException('Your account is not active yet or you have been banned :(');
+        }
+
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']) && $user->getIsActive();
     }
 

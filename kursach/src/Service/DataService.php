@@ -42,4 +42,19 @@ class DataService
 
         return $users;
     }
+
+    public function persistUserToDataBase(User $user): bool
+    {
+        $em = $this->em;
+        $em->persist($user);
+
+        try{
+            $em->flush();
+        }catch (\Exception $e)
+        {
+            $e->getMessage();
+            return 1;
+        }
+        return 0;
+    }
 }

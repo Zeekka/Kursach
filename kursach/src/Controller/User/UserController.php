@@ -32,7 +32,8 @@ class UserController extends AbstractController
 
         return $this->render('user/show.html.twig',[
                 'user' => $user,
-                'isSubscribedToUser' => in_array($id, $subscribes_id),
+                'isSubscribedToUser' => ($id !== $this->getUser()->getId()) ? in_array($id, $subscribes_id): true,
+                'user_subscribes' => $user->getMySubscribes()->toArray(),
             ]);
     }
 

@@ -22,10 +22,14 @@
                 Role: {{ user.roles[0] }}
             </td>
             <td>
-               Status: {{ user.isActive }}
+                {% if user.isActive %}
+                    Status: Active
+                {% else %}
+                    Status: Inactive
+                {% endif %}
             </td>
             <td>
-                <a href="{{ path('user_show', {id: user.id} ) }}">Edit</a>
+                <a href="{{ path('user_show', {id: user.id} ) }}">Show</a>
             </td>
         </tr>
     {% endfor %}

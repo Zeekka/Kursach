@@ -1,0 +1,7 @@
+<table>
+    {% for user in user_subscribes %}
+        <td>
+            {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} %}
+        </td>
+    {% endfor %}
+</table>

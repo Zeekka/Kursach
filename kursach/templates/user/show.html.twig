@@ -3,48 +3,23 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-<table>
-    <tr>
-        <td>
-            ID: {{ user.id }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            First Name: {{ user.firstName }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Last Name:  {{ user.lastName }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Email: {{ user.email }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Role: {{ user.roles[0] }}
-        </td>
-    </tr>
 
-        {% if is_granted('ROLE_MODERATOR') or app.user is same as(user) %}
-            <td>
-                <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
-            </td>
-        {% endif %}
-
-    {% if not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and not isSubscribedToUser %}
-        <td>
-            <a href="{{ path('subscribing', { id: user.id }) }}"> Follow {{ user.firstName }}</a>
-        </td>
-    {% elseif  not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and isSubscribedToUser%}
-        <td>
-            <a href="{{ path('unfollow', { id: user.id }) }}"> Unfollow {{ user.firstName }}</a>
-        </td>
+    {% if app.user is same as(user) %}
+        <h1>ME:</h1>
     {% endif %}
 
-</table>
+    {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} only %}
+
+    {% if app.user is same as(user) and user_subscribes %}
+
+        <h1>MY SUBSCRIBES:</h1>
+
+            {% include 'user/user_subscribes.html.twig' with{'user_subscribes': user_subscribes, 'isSubscribedToUser': isSubscribedToUser }only %}
+
+    {% elseif app.user is same as(user) and not user_subscribes %}
+
+        <h1>YOU HAVEN'T SUBSCRIBES YET :(</h1>
+
+    {% endif %}
+
 {% endblock %}
