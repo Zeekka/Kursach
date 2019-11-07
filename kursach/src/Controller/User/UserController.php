@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\EditForm;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,8 +22,17 @@ class UserController extends AbstractController
             ->findOneBy([
                 'id' => $id,
             ]);
+
+        $app_user_subscribes = $this->getUser()->getMySubscribes()->toArray();
+        $subscribes_id = [];
+        foreach($app_user_subscribes as $subscriber)
+        {
+            $subscribes_id[] = $subscriber->getId();
+        }
+
         return $this->render('user/show.html.twig',[
                 'user' => $user,
+                'isSubscribedToUser' => in_array($id, $subscribes_id),
             ]);
     }
 

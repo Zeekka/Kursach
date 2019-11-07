@@ -35,5 +35,16 @@
                 <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
             </td>
         {% endif %}
+
+    {% if not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and not isSubscribedToUser %}
+        <td>
+            <a href="{{ path('subscribing', { id: user.id }) }}"> Follow {{ user.firstName }}</a>
+        </td>
+    {% elseif  not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and isSubscribedToUser%}
+        <td>
+            <a href="{{ path('unfollow', { id: user.id }) }}"> Unfollow {{ user.firstName }}</a>
+        </td>
+    {% endif %}
+
 </table>
 {% endblock %}

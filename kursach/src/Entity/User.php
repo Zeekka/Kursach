@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -63,6 +67,26 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $uniqueHash;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="subscribedToMe")
+     * * @ORM\JoinTable(name="user_user",
+     *      joinColumns={@ORM\JoinColumn(name="user_source", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_target", referencedColumnName="id")}
+     *      )
+     */
+    private $mySubscribes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="mySubscribes")
+     */
+    private $subscribedToMe;
+
+    public function __construct()
+    {
+        $this->mySubscribes = new ArrayCollection();
+        $this->subscribedToMe = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -207,6 +231,60 @@ class User implements UserInterface
     public function setUniqueHash(string $uniqueHash): self
     {
         $this->uniqueHash = $uniqueHash;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getMySubscribes(): Collection
+    {
+        return $this->mySubscribes;
+    }
+
+    public function addMySubscribe(self $mySubscribe): self
+    {
+        if (!$this->mySubscribes->contains($mySubscribe)) {
+            $this->mySubscribes[] = $mySubscribe;
+        }
+
+        return $this;
+    }
+
+    public function removeMySubscribe(self $mySubscribe): self
+    {
+        if ($this->mySubscribes->contains($mySubscribe)) {
+            $this->mySubscribes->removeElement($mySubscribe);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getSubscribedToMe(): Collection
+    {
+        return $this->subscribedToMe;
+    }
+
+    public function addSubscribedToMe(self $subscribedToMe): self
+    {
+        if (!$this->subscribedToMe->contains($subscribedToMe)) {
+            $this->subscribedToMe[] = $subscribedToMe;
+            $subscribedToMe->addMySubscribe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscribedToMe(self $subscribedToMe): self
+    {
+        if ($this->subscribedToMe->contains($subscribedToMe)) {
+            $this->subscribedToMe->removeElement($subscribedToMe);
+            $subscribedToMe->removeMySubscribe($this);
+        }
 
         return $this;
     }
