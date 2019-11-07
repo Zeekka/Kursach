@@ -3,9 +3,11 @@
 
 namespace App\Service;
 
+use App\Entity\Role;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class DataService
 {
@@ -18,21 +20,36 @@ class DataService
         $this->container = $container;
     }
 
-    public function getUsers($request)
+    public function getUsers(Request $request, array $data): object
     {
         $em = $this->em;
         $container = $this->container;
 
-        $query = $em->createQuery(
-            '
+        if (!$data){
+            $query = $em->createQuery(
+                '
             SELECT
                 user, roles
             FROM
                 App\Entity\User user
-            INNER JOIN user.role_id roles        
+            INNER JOIN user.role_id roles      
             '
-        );
-
+            );
+        }
+        else {
+            $query = $em->createQuery(
+                '
+            SELECT
+                user, roles
+            FROM
+                App\Entity\User user
+            INNER JOIN user.role_id roles
+            WHERE user.id = :param
+            OR user.lastName = :param
+            OR user.email = :param        
+            '
+            )->setParameter('param', $data["search_field"]);
+        }
         $paginator = $container->get('knp_paginator');
         $users = $paginator->paginate(
             $query,
