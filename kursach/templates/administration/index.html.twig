@@ -5,6 +5,11 @@
 {% block body %}
     <form role="search" action="{{ path('administration') }}" method="GET">
         <input type="text" placeholder="Search" name="search_field">
+        <select name="sort_type">
+            <option value="email">Sort by email</option>
+            <option value="firstName">Sort by First Name</option>
+            <option value="lastName">Sort by Last Name</option>
+        </select>
         <input type="submit" value="Search">
     </form>
     <table>

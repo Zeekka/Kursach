@@ -26,25 +26,38 @@ class DataService
         $container = $this->container;
         $regex = "/^ROLE_/";
 
-        if (!$data){
-            $query = $em->createQuery(
-                '
-            SELECT
-                user, roles
-            FROM
-                App\Entity\User user
-            INNER JOIN user.role_id roles      
-            '
-            );
-        } else if ($data["search_field"] === ''){
-            $query = $em->createQuery(
-                '
-            SELECT
+        $query_base =
+            'SELECT
                 user, roles
             FROM
                 App\Entity\User user
             INNER JOIN user.role_id roles
-            '
+            ';
+
+        if (!$data) {
+            $sort_param = '';
+        }
+        else{
+            switch ($data) {
+                case $data["sort_type"] === "email":
+                    $sort_param = 'ORDER BY user.email';
+                    break;
+                case $data["sort_type"] === "firstName":
+                    $sort_param = 'ORDER BY user.firstName';
+                    break;
+                case $data["sort_type"] === "lastName":
+                    $sort_param = 'ORDER BY user.lastName';
+                    break;
+            }
+        }
+
+        if (!$data){
+            $query = $em->createQuery(
+             $query_base. $sort_param
+            );
+        } else if ($data["search_field"] === ''){
+            $query = $em->createQuery(
+                $query_base .$sort_param
             );
         } else if (preg_match($regex, $data["search_field"])){
 
@@ -52,40 +65,27 @@ class DataService
                 ->findOneBy([
                     'role' => $data["search_field"],
                 ]);
+
             $query = $em->createQuery(
-            '
-            SELECT
-                user, roles
-            FROM
-                App\Entity\User user
-            INNER JOIN user.role_id roles
+                $query_base. '
             WHERE user.role_id = :param
-            '
+            '.$sort_param
             )->setParameter('param', $role_id);
         } else if ($data["search_field"] === "Active" || $data["search_field"] === "Inactive"){
             $query = $em->createQuery(
-                '
-            SELECT
-                user, roles
-            FROM
-                App\Entity\User user
-            INNER JOIN user.role_id roles
+                $query_base.'
             WHERE user.isActive = :param      
-            '
+            '.$sort_param
             )->setParameter('param', $data["search_field"] === "Active" ? true : ($data["search_field"] === "Inactive" ? false : NULL ));
         } else {
             $query = $em->createQuery(
+                $query_base.
                 '
-            SELECT
-                user, roles
-            FROM
-                App\Entity\User user
-            INNER JOIN user.role_id roles
             WHERE user.id = :param
             OR user.email = :param
             OR user.firstName = :param
             OR user.lastName = :param      
-            '
+            '.$sort_param
             )->setParameter('param', $data["search_field"]);
         }
 
