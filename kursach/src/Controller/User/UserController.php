@@ -4,7 +4,6 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\EditForm;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +24,7 @@ class UserController extends AbstractController
 
         $app_user_subscribes = $this->getUser()->getMySubscribes()->toArray();
         $subscribes_id = [];
+
         foreach($app_user_subscribes as $subscriber)
         {
             $subscribes_id[] = $subscriber->getId();

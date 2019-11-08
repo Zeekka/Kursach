@@ -1,7 +1,13 @@
 <table>
-    {% for user in user_subscribes %}
-        <td>
-            {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} %}
-        </td>
+
+    {% set count = 0 %}
+        {% for user in user_subscribes %}
+            {% if count is same as(4) %}<tr>{% endif %}
+                <td>
+                    {% set count = count + 1 %}
+                    {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} %}
+                </td>
+        {% if count is same as(4) %}</tr>{% set count = 0 %}{% endif %}
     {% endfor %}
+
 </table>
