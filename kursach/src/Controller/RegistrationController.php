@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile as UpFile;
 
 class RegistrationController extends AbstractController
 {
@@ -54,6 +55,12 @@ class RegistrationController extends AbstractController
             $hash = $confirmationService->builtSha256($form->getData()->getEmail());
             $user->setUniqueHash($hash);
 
+            /** @var UpFile $image */
+            $image = $form['image']->getData();
+            $imageName = $this->generateUniqueName().'.'.$image->guessExtension();
+            $image->move($this->getParameter('image_directory'), $imageName);
+            $user->setImage($imageName);
+
             $confirmationService->sendMailToUser($user, $mailer, "Confirmation", 'email/register.html.twig');
 
             $this->dataService->persistUserToDataBase($user);
@@ -68,5 +75,14 @@ class RegistrationController extends AbstractController
         return $this->render('registration/index.html.twig', [
             'form' => $form->createView(),
         ]);
+
+
+    }
+     /**
+     * @return string
+     */
+    private function generateUniqueName()
+    {
+        return md5(uniqid());
     }
 }

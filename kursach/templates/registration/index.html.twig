@@ -3,5 +3,7 @@
 {% block title %}Hello RegistrationController!{% endblock %}
 
 {% block body %}
-{{ form(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.image) }}
+    {{ form_end(form) }}
 {% endblock %}
