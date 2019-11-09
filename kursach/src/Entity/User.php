@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -81,6 +83,13 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="mySubscribes")
      */
     private $subscribedToMe;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Please, upload your photo :)")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpeg", "image/jpg" })
+     */
+    private $image;
 
     public function __construct()
     {
@@ -285,6 +294,18 @@ class User implements UserInterface
             $this->subscribedToMe->removeElement($subscribedToMe);
             $subscribedToMe->removeMySubscribe($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
