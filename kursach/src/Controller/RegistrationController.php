@@ -8,7 +8,6 @@ use App\Form\RegistrationForm;
 use App\Service\ConfirmationService;
 use App\Service\DataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,8 +74,6 @@ class RegistrationController extends AbstractController
         return $this->render('registration/index.html.twig', [
             'form' => $form->createView(),
         ]);
-
-
     }
      /**
      * @return string

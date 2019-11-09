@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 class RegistrationForm extends AbstractType
 {
@@ -24,7 +25,8 @@ class RegistrationForm extends AbstractType
             ->add('image', FileType::class, [
                 'label' => "Upload your image",
                 'required' => false,
-
+                'data_class' => NULL,
+                'empty_data' => new File("D:/Itransition/OSPanel/domains/withgit/Kursach/kursach/public/users_images/default.jpg"),
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,

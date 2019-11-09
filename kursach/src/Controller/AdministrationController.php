@@ -17,6 +17,11 @@ class AdministrationController extends AbstractController
      */
     public function administration(DataService $dataService, Request $request): Response
     {
+
+        if (!$request->query->all() || count($request->query->all()) == 1){
+            $request->query->add(["sort_type" => '', "search_field" => '']);
+        }
+
         return $this->render('administration/index.html.twig', [
             'users' => $dataService->getUsers($request, $request->query->all()),
         ]);

@@ -5,14 +5,16 @@ namespace App\Controller\User;
 use App\Entity\User;
 use App\Form\EditForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile as UpFile;
 
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/profile/{id}/show", name="user_show", methods={"GET"})
+     * @Route("/user/profile/{id<\d+>}/show", name="user_show", methods={"GET"})
      */
     public function showAction(int $id): Response
     {
@@ -38,7 +40,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/profile/{id}/edit", name="user_edit", methods={"GET", "POST"})
+     * @Route("/user/profile/{id<\d+>}/edit", name="user_edit", methods={"GET", "POST"})
      */
     public function editAction(int $id, Request $request): Response
     {
@@ -49,21 +51,39 @@ class UserController extends AbstractController
             ]);
 
         $this->denyAccessUnlessGranted('edit', $user);
-
         $form = $this->createForm(EditForm::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
+
+            if ($form['image']->getData() != new File("D:/Itransition/OSPanel/domains/withgit/Kursach/kursach/public/users_images/default.jpg")){
+                /** @var UpFile $image */
+                $image = $form['image']->getData();
+                $imageName = $this->generateUniqueName().'.'.$image->guessExtension();
+                $image->move($this->getParameter('image_directory'), $imageName);
+                $user->setImage($imageName);
+            }
+            else{
+                $user->setImage(substr($form['image']->getData(),75));
+            }
+
             $em = $this->getDoctrine()
                 ->getManager();
-
             $em->persist($user);
             $em->flush();
         }
+
         return $this->render('user/edit.html.twig',[
             'form' => $form->createView(),
             'user' => $user,
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUniqueName()
+    {
+        return md5(uniqid());
     }
 }

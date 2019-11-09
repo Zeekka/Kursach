@@ -28,11 +28,17 @@ class EditForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options )
     {
         $user = $this->security->getUser();
-
+        $imageName = $user->getImage();
         $builder
             ->add('email', TextType::class)
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
+            ->add('image', FileType::class, [
+                'label' => "Upload your new image",
+                'data_class' => NULL,
+                'required' => false,
+                'empty_data' => new File("D:/Itransition/OSPanel/domains/withgit/Kursach/kursach/public/users_images/$imageName"),
+            ])
             ->add('isActive', CheckboxType::class, [
                 'required' => false,
                 'label' => "Active",
@@ -43,7 +49,7 @@ class EditForm extends AbstractType
                 'choice_label' => 'role',
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('role')
-                        ->where('role.id < :ROLE')
+                        ->where('role.id <= :ROLE')
                         ->setParameter('ROLE', $user->getRoleId()->getId());
            }])
             ->add('submit', SubmitType::class, ['label' => 'Save Changes'])

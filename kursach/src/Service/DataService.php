@@ -22,6 +22,7 @@ class DataService
 
     public function getUsers(Request $request, array $data): object
     {
+        $sort_param = '';
         $em = $this->em;
         $container = $this->container;
         $regex = "/^ROLE_/";
@@ -34,10 +35,6 @@ class DataService
             INNER JOIN user.role_id roles
             ';
 
-        if (!$data) {
-            $sort_param = '';
-        }
-        else{
             switch ($data) {
                 case $data["sort_type"] === "email":
                     $sort_param = 'ORDER BY user.email';
@@ -49,7 +46,6 @@ class DataService
                     $sort_param = 'ORDER BY user.lastName';
                     break;
             }
-        }
 
         if (!$data){
             $query = $em->createQuery(

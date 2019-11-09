@@ -1,13 +1,13 @@
 <table>
-
+    {% set row = 3 %}
     {% set count = 0 %}
         {% for user in user_subscribes %}
-            {% if count is same as(4) %}<tr>{% endif %}
+            {% if count is same as(row) %}<tr>{% endif %}
                 <td>
                     {% set count = count + 1 %}
                     {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} %}
                 </td>
-        {% if count is same as(4) %}</tr>{% set count = 0 %}{% endif %}
+        {% if count is same as(row) %}</tr>{% set count = 0 %}{% endif %}
     {% endfor %}
 
 </table>

@@ -93,6 +93,7 @@ class User implements UserInterface
 
     public function __construct()
     {
+        $this->image = 'default.jpg';
         $this->mySubscribes = new ArrayCollection();
         $this->subscribedToMe = new ArrayCollection();
     }
