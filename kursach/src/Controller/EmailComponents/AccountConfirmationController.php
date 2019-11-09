@@ -3,6 +3,7 @@
 namespace App\Controller\EmailComponents;
 
 use App\Entity\User;
+use App\Service\ConfirmationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccountConfirmationController extends AbstractController
 {
+    private $confirmationService;
+
+    public function __construct(ConfirmationService $confirmationService)
+    {
+        $this->confirmationService = $confirmationService;
+    }
+
     /**
      * @return Response
      * @Route("/confirmation/user/{hash}", name="email_confirmation")
@@ -28,6 +36,7 @@ class AccountConfirmationController extends AbstractController
         }
 
         $user->setIsActive(true);
+        $user->setUniqueHash($this->confirmationService->builtSha256($user->getEmail()));
 
         $em = $this->getDoctrine()->getManager();
         $em->flush();

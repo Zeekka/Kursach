@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdministrationController!{% endblock %}
+
+{% block body %}
+    <form role="search" action="{{ path('administration') }}" method="GET">
+        <input type="text" placeholder="Search" name="search_field">
+        <select name="sort_type">
+            <option value="email">Sort by email</option>
+            <option value="firstName">Sort by First Name</option>
+            <option value="lastName">Sort by Last Name</option>
+        </select>
+        <input type="submit" value="Search">
+    </form>
+    <table>
+        {% for user in users %}
+            <tr>
+                <td>
+                    ID: {{ user.id }}
+                </td>
+                <td>
+                    First Name: {{ user.firstName }}
+                </td>
+                <td>
+                   Last Name:  {{ user.lastName }}
+                </td>
+                <td>
+                   Email: {{ user.email }}
+                </td>
+                <td>
+                    Role: {{ user.roles[0] }}
+                </td>
+                <td>
+                    {% if user.isActive %}
+                        Status: Active
+                    {% else %}
+                        Status: Inactive
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('user_show', {id: user.id} ) }}">Show</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+        <div class="navigation">
+            {{ knp_pagination_render(users) }}
+        </div>
+        <style>
+            .navigation li{
+                display: inline;
+            }
+        </style>
+{% endblock %}

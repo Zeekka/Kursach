@@ -1,0 +1,2 @@
+<h1>New blogger: {{ blogger.firstName }} {{ blogger.lastName }} had registed! Check it out and give blogger rights to him!</h1>
+<a href="{{ absolute_url(path('user_edit', {id: blogger.id })) }}">Jump to edit {{ blogger.email }} page</a>

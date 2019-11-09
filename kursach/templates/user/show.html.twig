@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+
+    {% if app.user is same as(user) %}
+        <h1>ME:</h1>
+    {% endif %}
+
+    {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} only %}
+
+    {% if app.user is same as(user) and user_subscribes %}
+
+        <h1>MY SUBSCRIBES:</h1>
+
+            {% include 'user/user_subscribes.html.twig' with{'user_subscribes': user_subscribes, 'isSubscribedToUser': isSubscribedToUser }only %}
+
+    {% elseif app.user is same as(user) and not user_subscribes %}
+
+        <h1>YOU HAVEN'T SUBSCRIBES YET :(</h1>
+
+    {% endif %}
+
+{% endblock %}

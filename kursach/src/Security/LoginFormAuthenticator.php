@@ -48,6 +48,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
+            'isActive' => $request->request->get('isActive'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
@@ -76,7 +77,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password'])){
+            throw new CustomUserMessageAuthenticationException('Bad credentials');
+        }
+        if (!$user->getIsActive()){
+            throw new CustomUserMessageAuthenticationException('Your account is not active yet or you have been banned :(');
+        }
+
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']) && $user->getIsActive();
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

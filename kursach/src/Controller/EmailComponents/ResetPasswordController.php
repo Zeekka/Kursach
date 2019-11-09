@@ -6,8 +6,10 @@ namespace App\Controller\EmailComponents;
 
 use App\Entity\User;
 use App\Service\ConfirmationService;
+use App\Service\DataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,6 +22,13 @@ use function Sodium\compare;
 
 class ResetPasswordController extends AbstractController
 {
+    private $dataService;
+
+    public function __construct(DataService $dataService)
+    {
+        $this->dataService = $dataService;
+    }
+
     /**
      * @return Response
      * @Route("/reset", name="reset")
@@ -49,20 +58,26 @@ class ResetPasswordController extends AbstractController
 
             $hash = $confirmationService->builtSha256($user->getEmail());
             $user->setUniqueHash($hash);
-            $confirmationService->sendMailToUser($user, $mailer, $hash, "Reset password", 'email/reset_mail.html.twig');
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $confirmationService->sendMailToUser($user, $mailer, "Reset password", 'email/reset_mail.html.twig');
+            $this->dataService->persistUserToDataBase($user);
         }
 
         $reset_password = $this->createFormBuilder()
             ->setMethod("GET")
             ->add('Reset_code', TextType::class, ['required' => true])
-            ->add('new_password', TextType::class, ['required' => true])
+            ->add('new_password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'New Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+            ])
             ->add('reset', SubmitType::class)
             ->getForm();
 
         $reset_password->handleRequest($request);
+
         if ($reset_password->isSubmitted() && $reset_password->isValid()){
 
             $user = $this->getDoctrine()
@@ -75,11 +90,9 @@ class ResetPasswordController extends AbstractController
                 throw $this->createNotFoundException("Wrong reset code");
             }
 
-            $user->setPassword($encoder->encodePassword($user, $request->query->get("form")["new_password"]));
+            $user->setPassword($encoder->encodePassword($user, $request->query->get("form")["new_password"]["first"]));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->dataService->persistUserToDataBase($user);
 
                 return $this->render('home/index.html.twig');
         }
