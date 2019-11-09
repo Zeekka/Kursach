@@ -1,0 +1,28 @@
+<div class="respond">
+
+    <h3 class="h2">
+        <i class="fa fa-comment" aria-hidden="true"></i> {{ 'title.add_comment'|trans }}
+    </h3>
+
+    {{ form_start(form, {method: 'POST', action: path('comment_new', {'postSlug': post.slug, 'username': post.author.username})}) }}
+
+        <fieldset> 
+
+            {{ form_errors(form) }}
+
+            {{ form_errors(form.content) }}
+            <div class="message form-field">
+                {{ form_widget(form.content, {attr: {class: 'full-width', id: 'cMessage', name: 'cMessage', placeholder: 'title.your_message'|trans } }) }}
+            </div>
+
+            {{ form_help(form.content) }}
+
+            <button type="submit" class="submit btn--primary btn--large full-width">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                {{ 'action.publish_comment'|trans }}
+            </button>
+
+        </fieldset>
+    {{ form_end(form) }}
+
+</div>
