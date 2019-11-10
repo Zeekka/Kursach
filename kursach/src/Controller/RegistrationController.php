@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
             /** @var UpFile $image */
             $image = $form['image']->getData();
             $imageName = $this->generateUniqueName().'.'.$image->guessExtension();
-            $image->move($this->getParameter('image_directory'), $imageName);
+            copy($image->getPathname(), $this->getParameter('image_directory')."/".$imageName);
             $user->setImage($imageName);
 
             $confirmationService->sendMailToUser($user, $mailer, "Confirmation", 'email/register.html.twig');
