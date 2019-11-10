@@ -30,22 +30,22 @@
                         Role: {{ user.roles[0] }}
                     </td>
                 </tr>
+                <td>
+                    {% if is_granted('ROLE_MODERATOR') or app.user is same as(user) %}
 
-                {% if is_granted('ROLE_MODERATOR') or app.user is same as(user) %}
-                    <td>
                         <a href="{{ path('user_edit', {id: user.id}) }}">Edit</a>
-                    </td>
-                {% endif %}
 
-                {% if not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and not isSubscribedToUser %}
-                    <td>
+                    {% endif %}
+
+                    {% if not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and not isSubscribedToUser %}
                         <a href="{{ path('subscribing', { id: user.id }) }}"> Follow {{ user.firstName }}</a>
-                    </td>
-                {% elseif  not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and isSubscribedToUser%}
-                    <td>
+
+                    {% elseif  not app.user is same as(user) and user.roles[0] is same as("ROLE_BLOGER") and isSubscribedToUser%}
+
                         <a href="{{ path('unfollow', { id: user.id }) }}"> Unfollow {{ user.firstName }}</a>
-                    </td>
-                {% endif %}
+
+                    {% endif %}
+                </td>
             </table>
         </td>
     </tr>

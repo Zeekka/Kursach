@@ -3,52 +3,63 @@
 {% block title %}Hello AdministrationController!{% endblock %}
 
 {% block body %}
-    <form role="search" action="{{ path('administration') }}" method="GET">
-        <input type="text" placeholder="Search" name="search_field">
-        <select name="sort_type">
-            <option value="email">Sort by email</option>
-            <option value="firstName">Sort by First Name</option>
-            <option value="lastName">Sort by Last Name</option>
-        </select>
-        <input type="submit" value="Search">
-    </form>
-    <table>
-        {% for user in users %}
-            <tr>
-                <td>
-                    ID: {{ user.id }}
-                </td>
-                <td>
-                    First Name: {{ user.firstName }}
-                </td>
-                <td>
-                   Last Name:  {{ user.lastName }}
-                </td>
-                <td>
-                   Email: {{ user.email }}
-                </td>
-                <td>
-                    Role: {{ user.roles[0] }}
-                </td>
-                <td>
-                    {% if user.isActive %}
-                        Status: Active
-                    {% else %}
-                        Status: Inactive
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('user_show', {id: user.id} ) }}">Show</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-        <div class="navigation">
-            {{ knp_pagination_render(users) }}
-        </div>
+    <a href="{{ path('administration_posts') }}">POSTS</a>
+    <div class="administration-table">
+        <form role="search" action="{{ path('administration_users') }}" method="GET">
+            <input type="text" placeholder="Search" name="search_field">
+            <select name="sort_type">
+                <option value="email">Sort by email</option>
+                <option value="firstName">Sort by First Name</option>
+                <option value="lastName">Sort by Last Name</option>
+            </select>
+            <input type="submit" value="Search">
+        </form>
+        <table>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        ID: {{ user.id }}
+                    </td>
+                    <td>
+                        First Name: {{ user.firstName }}
+                    </td>
+                    <td>
+                       Last Name:  {{ user.lastName }}
+                    </td>
+                    <td>
+                       Email: {{ user.email }}
+                    </td>
+                    <td>
+                        Role: {{ user.roles[0] }}
+                    </td>
+                    <td>
+                        {% if user.isActive %}
+                            Status: Active
+                        {% else %}
+                            Status: Inactive
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('user_show', {id: user.id} ) }}">Show</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+            <div class="navigation">
+                {{ knp_pagination_render(users) }}
+            </div>
+    </div>
         <style>
             .navigation li{
                 display: inline;
+            }
+            .administration-table{
+                position: absolute;
+                margin-left: 100px;
+                margin-top: 100px;
+            }
+            .administration-table td{
+                width: 200px;
             }
         </style>
 {% endblock %}

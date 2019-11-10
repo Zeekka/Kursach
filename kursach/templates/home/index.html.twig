@@ -4,14 +4,20 @@
 
 {% block body %}
     {% if is_granted("ROLE_MODERATOR") %}
-        <a href="{{ path('administration') }}">ADMINISTRATION</a>
+        <a href="{{ path('administration_users') }}">ADMINISTRATION</a>
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <a href="{{ path('preferences') }}">PREFERENCES</a>
         <a href="{{ path('user_show', {id: app.user.id} ) }}">MY ACCOUNT</a>
         <a href="{{ path('app_logout') }}"> LOGOUT </a>
     {% else %}
         <a href="{{ path('registration') }}"> SIGN UP </a>
         <a href="{{ path('app_login') }}"> SIGN IN </a>
     {% endif %}
+    {% if is_granted('ROLE_BLOGER') %}
+        <a href="{{ path('my_post_index') }}">MY POSTS</a>
+        <a href="{{ path('author_post_new') }}">CREATE POST</a>
+    {% endif %}
+
 
 {% endblock %}

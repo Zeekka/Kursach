@@ -99,12 +99,6 @@ class Post
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $author;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="postsLiked")
      * @ORM\JoinTable(name="post_likes",
      *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
@@ -112,6 +106,12 @@ class Post
      * )
      */
     private $likedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {

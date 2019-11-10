@@ -1,25 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
-
+{% block title %}User Info{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('user_style/user_info.css') }}">
+{% endblock %}
 {% block body %}
+    {{ parent() }}
+    <div class="user-info">
+        <div>
+            {% if app.user is same as(user) %}
+                <h1>ME:</h1>
+            {% endif %}
 
-    {% if app.user is same as(user) %}
-        <h1>ME:</h1>
-    {% endif %}
+            {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} only %}
+        </div>
+        <div>
+            {% if app.user is same as(user) and user_subscribes %}
 
-    {% include 'user/render_user.html.twig' with{'user': user, 'isSubscribedToUser': isSubscribedToUser} only %}
+                <h1>MY SUBSCRIBES:</h1>
 
-    {% if app.user is same as(user) and user_subscribes %}
+                {% include 'user/user_subscribes.html.twig' with{'user_subscribes': user_subscribes, 'isSubscribedToUser': isSubscribedToUser }only %}
 
-        <h1>MY SUBSCRIBES:</h1>
+            {% elseif app.user is same as(user) and not user_subscribes %}
 
-            {% include 'user/user_subscribes.html.twig' with{'user_subscribes': user_subscribes, 'isSubscribedToUser': isSubscribedToUser }only %}
+                <h1>YOU HAVEN'T SUBSCRIBES YET :(</h1>
 
-    {% elseif app.user is same as(user) and not user_subscribes %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="user-posts">
+        <h2>Here should be your posts</h2>
+    </div>
 
-        <h1>YOU HAVEN'T SUBSCRIBES YET :(</h1>
-
-    {% endif %}
 
 {% endblock %}

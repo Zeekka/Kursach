@@ -1,9 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello RegistrationController!{% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('forms_style/registration.css') }}">
+{% endblock %}
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_row(form.image) }}
-    {{ form_end(form) }}
+    <div class="signup-form">
+        {{ form_start(form) }}
+        <h2>Register</h2>
+        <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-6">
+                    {{ form_row(form.firstName) }}
+                    {{ form_widget(form.firstName, {attr: {class: "form-control", placeholder: "First Name", required: "required"}}) }}
+                </div>
+                <div class="col-xs-6">
+                    {{ form_row(form.lastName) }}
+                    {{ form_widget(form.firstName, {'attr': {'placeholder': "First Name", 'required': "required"}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.password) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.image) }}
+            {{ form_widget(form.image, {'attr': {'class': ''}}) }}
+        </div>
+
+        {{ form_end(form) }}
+        <div class="text-center">
+            Already have an account? <a href="{{ path('app_login') }}">Sign in</a>
+        </div>
+    </div>
 {% endblock %}

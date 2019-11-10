@@ -13,9 +13,9 @@ class AdministrationController extends AbstractController
 {
     /**
      * @IsGranted("ROLE_MODERATOR")
-     * @Route("/administration", name="administration", methods={"GET", "POST"})
+     * @Route("/administration/users", name="administration_users", methods={"GET", "POST"})
      */
-    public function administration(DataService $dataService, Request $request): Response
+    public function administrationUsers(DataService $dataService, Request $request): Response
     {
 
         if (!$request->query->all() || count($request->query->all()) == 1){
@@ -23,6 +23,21 @@ class AdministrationController extends AbstractController
         }
 
         return $this->render('administration/index.html.twig', [
+            'users' => $dataService->getUsers($request, $request->query->all()),
+        ]);
+    }
+    /**
+     * @IsGranted("ROLE_MODERATOR")
+     * @Route("/administration/posts", name="administration_posts", methods={"GET", "POST"})
+     */
+    public function administrationPosts(DataService $dataService, Request $request): Response
+    {
+
+        if (!$request->query->all() || count($request->query->all()) == 1){
+            $request->query->add(["sort_type" => '', "search_field" => '']);
+        }
+
+        return $this->render('administration/posts.html.twig', [
             'users' => $dataService->getUsers($request, $request->query->all()),
         ]);
     }

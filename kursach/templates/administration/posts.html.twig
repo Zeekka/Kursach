@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <a href="{{ path('administration_users') }}">USERS</a>
+{% endblock %}

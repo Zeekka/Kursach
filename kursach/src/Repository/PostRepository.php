@@ -5,13 +5,15 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use App\Entity\Tag;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
-class PostRepository
+class PostRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -104,5 +106,15 @@ class PostRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function findUserPreferences(User $user, EntityManagerInterface  $entityManager): array
+    {
+        $query = $this->createQueryBuilder('p');
+
+        return $query->getResult();
     }
 }

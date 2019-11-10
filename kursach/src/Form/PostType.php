@@ -29,7 +29,7 @@ class PostType extends AbstractType
                 'label' => 'label.content',
             ])
             ->add('tags')
-            ->add('image', FileType::class, ['label' => 'Image (PNG/JPG/JPEG file) '])
+            ->add('image', FileType::class, ['label' => 'Image (PNG/JPG/JPEG file) ', 'data_class' => NULL])
         ;
     }
 

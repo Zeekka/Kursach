@@ -5,6 +5,7 @@ namespace App\Controller\EmailComponents;
 
 
 use App\Entity\User;
+use App\Form\ResetPasswordForm;
 use App\Service\ConfirmationService;
 use App\Service\DataService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,20 +63,7 @@ class ResetPasswordController extends AbstractController
             $this->dataService->persistUserToDataBase($user);
         }
 
-        $reset_password = $this->createFormBuilder()
-            ->setMethod("GET")
-            ->add('Reset_code', TextType::class, ['required' => true])
-            ->add('new_password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => ['label' => 'New Password'],
-                'second_options' => ['label' => 'Repeat Password'],
-            ])
-            ->add('reset', SubmitType::class)
-            ->getForm();
-
+        $reset_password = $this->createForm(ResetPasswordForm::class);
         $reset_password->handleRequest($request);
 
         if ($reset_password->isSubmitted() && $reset_password->isValid()){
@@ -83,14 +71,15 @@ class ResetPasswordController extends AbstractController
             $user = $this->getDoctrine()
                 ->getRepository(User::class)
                 ->findOneBy([
-                    'uniqueHash' =>  $request->query->get("form")["Reset_code"],
+                    'uniqueHash' =>  $request->request->get("reset_password_form")["Reset_code"],
                 ]);
 
+            var_dump($request->request->get("reset_password_form"));
             if (!$user){
                 throw $this->createNotFoundException("Wrong reset code");
             }
 
-            $user->setPassword($encoder->encodePassword($user, $request->query->get("form")["new_password"]["first"]));
+            $user->setPassword($encoder->encodePassword($user, $request->request->get("reset_password_form")["new_password"]["first"]));
 
             $this->dataService->persistUserToDataBase($user);
 

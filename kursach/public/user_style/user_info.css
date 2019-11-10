@@ -1,0 +1,10 @@
+.user-info{
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+.user-posts{
+    float: right;
+    width: 50%;
+    height: 100%;
+}

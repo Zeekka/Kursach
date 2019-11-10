@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('forms_style/edit_user.css') }}">
+{% endblock %}
 {% block body %}
-<table>
-    <tr>
-
-        <td>
-            <img src="{{ asset("users_images/" ~ user.image) }}" alt="Here should be your new image">
-        </td>
-        <td>
+<div class="user-edit-table">
+    <div class="user-img">
+        <img src="{{ asset("users_images/" ~ user.image) }}" alt="Here should be your new image" >
+    </div>
+        <div class="user-edit-form">
             {{ form_start(form) }}
             {{ form_errors(form) }}
-
             {{ form_row(form.email) }}
             {{ form_row(form.firstName) }}
             {{ form_row(form.lastName) }}
             {{ form_row(form.image) }}
-
 
             {% if not is_granted('ROLE_MODERATOR') or app.user.roleId.id <= user.roleId.id %}
                 {{ form_widget(form.isActive, {attr: {style: "display:none"}}) }}
@@ -28,7 +28,6 @@
                 <a href="{{ path('reset') }}"> Reset Password </a>
             {% endif %}
             {{ form_end(form) }}
-        </td>
-    </tr>
-</table>
+        </div>
+</div>
 {% endblock %}
