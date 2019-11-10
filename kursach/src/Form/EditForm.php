@@ -37,7 +37,7 @@ class EditForm extends AbstractType
                 'label' => "Upload your new image",
                 'data_class' => NULL,
                 'required' => false,
-                'empty_data' => new File("D:/Itransition/OSPanel/domains/withgit/Kursach/kursach/public/users_images/$imageName"),
+                'empty_data' => new File("{$_SERVER["DOCUMENT_ROOT"]}/users_images/$imageName"),
             ])
             ->add('isActive', CheckboxType::class, [
                 'required' => false,

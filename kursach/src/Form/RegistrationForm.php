@@ -26,7 +26,7 @@ class RegistrationForm extends AbstractType
                 'label' => "Upload your image",
                 'required' => false,
                 'data_class' => NULL,
-                'empty_data' => new File("D:/Itransition/OSPanel/domains/withgit/Kursach/kursach/public/users_images/default.jpg"),
+                'empty_data' => new File("{$_SERVER["DOCUMENT_ROOT"]}/users_images/default/default.jpg"),
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,

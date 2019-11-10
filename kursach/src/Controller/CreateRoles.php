@@ -3,7 +3,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Role;
 use App\Service\ConfirmationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

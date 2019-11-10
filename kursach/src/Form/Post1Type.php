@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +18,7 @@ class Post1Type extends AbstractType
             ->add('summary')
             ->add('content')
             ->add('publishedAt')
-            ->add('image')
+            ->add('image', FileType::class, ['data_class' => NULL])
             ->add('author')
             ->add('tags')
         ;

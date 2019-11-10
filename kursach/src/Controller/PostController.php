@@ -38,7 +38,7 @@ class PostController extends AbstractController
         $post = new Post();
         $post->setAuthor($this->getUser());
 
-        $form = $this->createForm(PostType::class, $post)
+        $form = $this->createForm(Post1Type::class, $post)
             ->add('saveAndCreateNew', SubmitType::class);
 
         $form->handleRequest($request);
@@ -59,7 +59,7 @@ class PostController extends AbstractController
             return $this->redirectToRoute('admin_post_index');
         }
 
-        return $this->render('admin/blog/new.html.twig', [
+        return $this->render('admin/blog/user_profile/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
